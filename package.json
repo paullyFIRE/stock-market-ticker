@@ -1,0 +1,19 @@
+{
+  "name": "stockmarketticker",
+  "version": "1.0.0",
+  "description": "Fetches and plots daily stock-market closes for a stock",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "Paul David Patterson <pddpatterson@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemon": "^1.18.1"
+  },
+  "devDependencies": {
+    "fs": "0.0.1-security"
+  }
+}

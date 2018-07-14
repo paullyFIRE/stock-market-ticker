@@ -1,0 +1,7 @@
+.border-red {
+  border: 2px solid red;
+}
+
+#chartContainer {
+  margin: 4em;
+}
