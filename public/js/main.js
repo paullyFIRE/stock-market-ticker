@@ -1,21 +1,10 @@
-const loadSampleData = async () => {
-  const request = await fetch('sampleData.json');
-  return request.json();
-};
+import * as API from './api';
+import * as CONFIG from './config';
+import Chart from './chart';
 
-const formatRawData = apiData => {
-  const metadata = apiData['Meta Data'];
-  const rawDataPoints = apiData['Time Series (Daily)'];
+const stockChart = new Chart();
 
-  const dataPoints = Object.keys(rawDataPoints)
-    .map(tradingDay => ({
-      date: new Date(tradingDay),
-      data: parseFloat(rawDataPoints[tradingDay]['4. close'])
-    }))
-    .sort((a, b) => a.date - b.date);
-
-  return { metadata, dataPoints };
-};
+import sampleData from '../sampleData.json';
 
 const sliceRandomDataSelection = (dataPoints, selectionLength) => {
   const startIndex = Math.floor(Math.random() * (dataPoints.length - selectionLength));
@@ -47,7 +36,7 @@ const getPeriodMetadata = data => {
 };
 
 const getDataExerpt = data => {
-  const dataExcerpt = sliceRandomDataSelection(data.dataPoints, 180);
+  const dataExcerpt = sliceRandomDataSelection(data.dataPoints, 60);
   const excerptMetadata = getPeriodMetadata(dataExcerpt);
   const symbol = data.metadata['2. Symbol'];
   const metadata = Object.assign({}, excerptMetadata, { symbol });
@@ -55,60 +44,14 @@ const getDataExerpt = data => {
   return { data: dataExcerpt, metadata };
 };
 
-const renderGraph = ({ metadata, data, initialData = [] }) => {
-  let dataPoints = initialData.map((dataPoint, index) => {
-    return { y: dataPoint.data };
-  });
-
-  const chart = new CanvasJS.Chart('chartContainer', {
-    animationEnabled: true,
-    theme: 'theme2',
-    title: {
-      text: `${metadata.startDay}-${metadata.startMonth}-${metadata.startYear} to ${
-        metadata.endDay
-      }-${metadata.endMonth}-${metadata.endYear} (${metadata.symbol})`
-    },
-    axisX: {
-      tickLength: 5,
-      lineThickness: 2,
-      labelFormatter: function() {
-        return '';
-      }
-    },
-    axisY: {
-      includeZero: false
-    },
-    data: [
-      {
-        type: 'line',
-        dataPoints
-      }
-    ]
-  });
-
-  chart.render();
-
-  // Iterate in interval for ticketing effect
-  let index = 0;
-
-  setInterval(() => {
-    if (index == data.length) {
-      clearInterval(this);
-    } else {
-      dataPoints.push({ y: data[index].data });
-      index++;
-      chart.render();
-    }
-  }, 100);
-};
-
-const pushGraphDataPoints = () => {};
-
 window.onload = async () => {
-  const sampleData = await loadSampleData();
-  const formattedData = formatRawData(sampleData);
+  const tradingPair = CONFIG.getRandomTradingPair();
 
+  const data = await API.fetchData(tradingPair);
+
+  // const formattedData = API.formatRawData(sampleData);
+  const formattedData = API.formatRawData(data);
   const dataExerpt = getDataExerpt(formattedData);
 
-  renderGraph(dataExerpt);
+  stockChart.renderGraph(dataExerpt);
 };
