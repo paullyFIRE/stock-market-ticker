@@ -7,7 +7,7 @@ export default class Chart {
     });
     const chart = new CanvasJS.Chart('chartContainer', {
       animationEnabled: true,
-      theme: 'theme2',
+      theme: 'theme1',
       title: {
         text: `${metadata.startDay}-${metadata.startMonth}-${metadata.startYear} to ${
           metadata.endDay
@@ -26,6 +26,7 @@ export default class Chart {
       data: [
         {
           type: 'line',
+          markerType: 'none',
           dataPoints
         }
       ]

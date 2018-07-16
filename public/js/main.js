@@ -4,7 +4,7 @@ import Chart from './chart';
 
 const stockChart = new Chart();
 
-import sampleData from '../sampleData.json';
+// import sampleData from '../sampleData.json';
 
 const sliceRandomDataSelection = (dataPoints, selectionLength) => {
   const startIndex = Math.floor(Math.random() * (dataPoints.length - selectionLength));
@@ -36,7 +36,7 @@ const getPeriodMetadata = data => {
 };
 
 const getDataExerpt = data => {
-  const dataExcerpt = sliceRandomDataSelection(data.dataPoints, 60);
+  const dataExcerpt = sliceRandomDataSelection(data.dataPoints, 120);
   const excerptMetadata = getPeriodMetadata(dataExcerpt);
   const symbol = data.metadata['2. Symbol'];
   const metadata = Object.assign({}, excerptMetadata, { symbol });

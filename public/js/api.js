@@ -1,5 +1,3 @@
-import { rejects } from 'assert';
-
 export const formatRawData = apiData => {
   const metadata = apiData['Meta Data'];
   const rawDataPoints = apiData['Time Series (Daily)'];
